@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XOANON — Blur Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050505;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* SVG filter definition — hidden, just registers the filter */
+  #svg-filters { position: absolute; width: 0; height: 0; }
+
+  .wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 200px);
+    letter-spacing: 12px;
+    color: #e8e0d5;
+    user-select: none;
+    /* Apply the SVG filter */
+    filter: url(#motion-blur);
+    will-change: filter, transform;
+    transition: filter 0.05s linear;
+  }
+
+  .hint {
+    margin-top: 40px;
+    font-family: monospace;
+    font-size: 12px;
+    color: rgba(200,169,110,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Debug readout */
+  .debug {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: monospace;
+    font-size: 11px;
+    color: rgba(200,169,110,0.35);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG Filter Bank -->
+<svg id="svg-filters" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="motion-blur" x="-50%" y="-50%" width="200%" height="200%">
+      <!--
+        feGaussianBlur with stdDeviation="X Y"
+        X = horizontal blur, Y = vertical blur
+        We rotate the filter via primitiveUnits to match mouse direction
+      -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0 0" result="blur"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="wordmark" id="wordmark">XOANON</div>
+<div class="hint">Move your mouse fast ↗</div>
+<div class="debug" id="debug">velocity: 0 · angle: 0° · blur: 0</div>
+
+<script>
+  const wordmark = document.getElementById('wordmark');
+  const filterEl = document.querySelector('#motion-blur feGaussianBlur');
+  const debug = document.getElementById('debug');
+
+  let lastX = 0, lastY = 0;
+  let blurX = 0, blurY = 0;
+  let angle = 0;
+
+  // Smoothing — how fast blur decays when mouse slows
+  const DECAY = 0.82;
+  // Max blur strength
+  const MAX_BLUR = 18;
+  // Sensitivity — higher = more blur per pixel moved
+  const SENSITIVITY = 0.18;
+
+  let velX = 0, velY = 0;
+
+  document.addEventListener('mousemove', e => {
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+
+    // Raw velocity
+    velX = dx * SENSITIVITY;
+    velY = dy * SENSITIVITY;
+
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function animate() {
+    // Smooth the blur values
+    blurX = lerp(blurX, Math.abs(velX), 0.3);
+    blurY = lerp(blurY, Math.abs(velY), 0.3);
+
+    // Decay velocity each frame
+    velX *= DECAY;
+    velY *= DECAY;
+
+    // Clamp to max
+    const bx = Math.min(blurX, MAX_BLUR).toFixed(2);
+    const by = Math.min(blurY, MAX_BLUR).toFixed(2);
+
+    // Apply to SVG filter — stdDeviation="x y" = horizontal/vertical independently
+    filterEl.setAttribute('stdDeviation', `${bx} ${by}`);
+
+    // Compute angle for debug
+    angle = Math.atan2(velY, velX) * (180 / Math.PI);
+    const speed = Math.sqrt(velX * velX + velY * velY).toFixed(1);
+    debug.textContent = `vel: ${speed} · angle: ${angle.toFixed(0)}° · blur X:${bx} Y:${by}`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
+</body>
+</html>

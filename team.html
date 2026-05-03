@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XOANON — Team</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ─── FILTERS ─── */
+.team-filters { display: flex; gap: 8px; margin-bottom: 60px; }
+.tf {
+  font-size: 12px; font-weight: 500; letter-spacing: .3px;
+  color: var(--muted2); padding: 8px 20px; border: 1px solid var(--border); border-radius: 100px;
+  cursor: none; transition: color .25s, border-color .25s, background .25s;
+  font-family: 'DM Sans', sans-serif;
+}
+.tf.active, .tf:hover { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+
+/* ─── GRID ─── */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px 20px; margin-bottom: 60px; }
+
+/* ─── CARD ─── */
+.tc {
+  display: flex; flex-direction: column; gap: 16px;
+  cursor: none;
+}
+.tc-image-wrapper {
+  position: relative; border-radius: 12px; overflow: hidden;
+  aspect-ratio: 3/4; background: var(--surface2);
+}
+.tc-ph {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+  display: flex; align-items: center; justify-content: center;
+}
+.tc-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tc-ph svg { opacity: .1; }
+
+/* Hover Overlay */
+.tc-hover-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(232, 224, 213, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transform: translateY(-101%);
+  transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1);
+  padding: 28px 24px;
+  display: flex; flex-direction: column;
+  box-sizing: border-box;
+}
+.tc:hover .tc-hover-overlay {
+  transform: translateY(0);
+}
+
+.tc-hover-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 26px; color: #1a1a1a; line-height: 1.1;
+  margin-bottom: 30px; font-weight: 400; letter-spacing: -0.5px;
+}
+.tc-hover-details {
+  display: flex; gap: 16px; flex: 1;
+}
+.tc-col {
+  display: flex; flex-direction: column; gap: 16px; flex: 1;
+}
+.tc-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+  letter-spacing: 1px; text-transform: uppercase; color: #8e3b46;
+}
+.tc-value {
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: #1a1a1a;
+  margin-bottom: 12px; margin-top: 4px; line-height: 1.4;
+}
+
+.tc-hover-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #8e3b46; color: #ffffff;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: auto; align-self: flex-start;
+  text-decoration: none; cursor: none;
+  transition: transform 0.3s;
+}
+.tc-hover-btn:hover {
+  transform: scale(1.05);
+}
+.tc-hover-btn svg { width: 20px; height: 20px; }
+
+.tc-bottom-name {
+  font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--ink);
+  font-weight: 500; text-align: left; padding-left: 4px;
+}
+
+/* ─── JOIN ─── */
+.join-card {
+  background: var(--surface); border: 1px dashed var(--border2);
+  border-radius: 12px; height: 100%; min-height: 300px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 36px; gap: 16px;
+  transition: border-color .3s var(--expo), background .3s;
+  cursor: none;
+}
+.join-card:hover { border-color: rgba(200,169,110,0.4); background: var(--gold2); }
+.join-card:hover .join-icon { transform: rotate(90deg); }
+.join-icon { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--muted); line-height: 1; transition: transform .4s var(--expo), color .3s; }
+.join-card:hover .join-icon { color: var(--gold); }
+.join-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: var(--muted2); }
+.join-sub { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300; }
+.join-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gold); font-weight: 600; text-decoration: none; cursor: none; margin-top: 4px; transition: gap .3s var(--expo); }
+.join-link:hover { gap: 12px; }
+</style>
+</head>
+<body>
+<div id="ptrans"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="navbar" class="solid">
+  <a href="index.html" class="nav-logo magnetic">XOANON</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="capabilities.html">Platform</a></li>
+    <li><a href="team.html" class="active">Team</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+  </ul>
+  <div class="nav-right"><a href="pricing.html" class="nav-cta magnetic">Enter XOANON</a></div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg" style="background:radial-gradient(ellipse 60% 50% at 0% 100%,rgba(200,169,110,0.06),transparent 55%)"></div>
+  <svg class="draw-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+    <path class="dp" style="--l:800;--t:2s;--d:.5s" stroke="rgba(200,169,110,0.12)" stroke-width="1"
+      d="M0,500 L100,500 L100,380 L240,380 L240,440 L380,440"/>
+    <circle class="dp" style="--l:60;--t:.8s;--d:2.3s" cx="100" cy="500" r="4" stroke="rgba(200,169,110,0.4)" stroke-width="1.2"/>
+    <path class="dp" style="--l:600;--t:1.8s;--d:.8s" stroke="rgba(200,169,110,0.07)" stroke-width=".8"
+      d="M1440,300 L1340,300 L1340,460 L1200,460"/>
+    <path class="dp" style="--l:300;--t:1.2s;--d:1.2s" stroke="rgba(200,169,110,0.09)" stroke-width=".8"
+      d="M700,0 L700,120 L820,120"/>
+    <circle class="dp" style="--l:380;--t:1.5s;--d:1.6s" cx="700" cy="800" r="60" stroke="rgba(200,169,110,0.06)" stroke-width=".8"/>
+  </svg>
+  <div class="page-hero-content">
+    <div class="hero-label">The People</div>
+    <h1 class="hero-title">The <span class="gold">13.</span><br><span class="outline">Our Team.</span></h1>
+    <p class="hero-sub">Builders, engineers, and designers united by one obsession — tools that feel as powerful as the ideas they serve.</p>
+    <div class="hero-meta">
+      <div class="hm-item">13 members</div>
+      <div class="hm-sep"></div>
+      <div class="hm-item">Remote-first</div>
+      <div class="hm-sep"></div>
+      <div class="hm-item">Founded 2026</div>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-track"></div><span>Scroll</span></div>
+</div>
+
+<!-- TEAM GRID -->
+<div class="section">
+  <div class="team-filters reveal">
+    <div class="tf active">All</div>
+    <div class="tf">Founders</div>
+    <div class="tf">Engineering</div>
+    <div class="tf">Design</div>
+    <div class="tf">Product</div>
+  </div>
+
+  <div class="team-grid">
+
+    <!-- CARD 1 -->
+    <div class="tc reveal">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Your Name<br>Here</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City, Country</div><div class="tc-label">Focus</div><div class="tc-value">Vision<br>Growth<br>Fundraising</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product Strategy</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Your Name Here</div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="tc reveal d1">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">AI<br>Infrastructure</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="tc reveal d2">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">UX<br>Brand</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Design</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="tc reveal d3">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Backend</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 5 -->
+    <div class="tc reveal">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Roadmap</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 6 -->
+    <div class="tc reveal d1">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Models</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 7 -->
+    <div class="tc reveal d2">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">UI/UX</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 8 -->
+    <div class="tc reveal d3">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Growth</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Operations</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 9 -->
+    <div class="tc reveal">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Data</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 10 -->
+    <div class="tc reveal d1">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Strategy</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- CARD 11 -->
+    <div class="tc reveal d2">
+      <div class="tc-image-wrapper">
+        <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="tc-hover-overlay">
+          <div class="tc-hover-name">Team<br>Member</div>
+          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Visuals</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Design</div></div></div>
+          <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+      <div class="tc-bottom-name">Team Member</div>
+    </div>
+
+    <!-- JOIN CARD -->
+    <div class="join-card reveal d4 magnetic">
+      <div class="join-icon">+</div>
+      <div class="join-title">Join the team</div>
+      <div class="join-sub">Building something rare. If you're obsessed with craft, we want to hear from you.</div>
+      <a href="mailto:hello@xoanon.com" class="join-link">Get in touch →</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">XOANON</div>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="capabilities.html">Platform</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 XOANON Technologies</div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+document.querySelectorAll('.tf').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tf').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

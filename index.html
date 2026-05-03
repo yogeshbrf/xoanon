@@ -85,6 +85,7 @@
 .hero-center {
   position: relative; z-index: 3;
   display: flex; flex-direction: column; align-items: center; text-align: center;
+  animation: floatBreath 8s ease-in-out infinite;
 }
 .hero-eyebrow {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
@@ -96,16 +97,44 @@
 .hero-eyebrow::before, .hero-eyebrow::after { content:''; width: 40px; height: 1px; background: var(--gold); opacity: .6; }
 
 .hero-wordmark {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 14vw, 200px);
-  letter-spacing: 12px; line-height: .9;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(80px, 12vw, 200px);
+  letter-spacing: 24px; line-height: .9;
   white-space: nowrap;
-  mix-blend-mode: screen; color: var(--ink);
+  color: #ffffff;
   opacity: 0; animation: fadeInScale 1.2s .4s var(--expo) forwards;
   user-select: none;
-  transition: filter .25s ease;
-  will-change: filter;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
+
+.hw-letter {
+  display: inline-block;
+  will-change: transform, filter, opacity, text-shadow;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              text-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: waveBlur 4s infinite ease-in-out;
+  animation-delay: calc(var(--i) * 0.15s);
+}
+
+.hero-wordmark:hover .hw-letter {
+  animation: none;
+}
+
+@keyframes waveBlur {
+  0%, 100% { filter: blur(0px); opacity: 1; transform: scale(1); }
+  50% { filter: blur(3px); opacity: 0.8; transform: scale(0.98); }
+}
+
+@keyframes floatBreath {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.01); }
+}
+
 @keyframes fadeInScale {
   from { opacity:0; transform: scale(.96); }
   to   { opacity:1; transform: scale(1); }
@@ -330,6 +359,7 @@
     <div class="hgc" data-slot="12"><video data-src="Neural_Threads_Of_Light_Video.mp4" autoplay muted loop playsinline></video></div>
   </div>
   <div class="hero-vignette"></div>
+  <canvas id="hero-particles" style="position:absolute;inset:0;z-index:1;pointer-events:none;"></canvas>
 
   <!-- SVG draw lines over hero -->
   <svg class="hero-lines" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
@@ -551,12 +581,10 @@
 <script src="shared.js"></script>
 <script>
 // ── VIDEO TILE LOADER ──
-// To add a video: set data-src="path/to/video.mp4" on each .hgc div
-// Videos load lazily; tile shows placeholder until video is ready
 document.querySelectorAll('.hgc').forEach(tile => {
   const video = tile.querySelector('video');
   const src = video?.dataset.src;
-  if (!src) return; // no src set → stays as dark placeholder
+  if (!src) return; 
 
   video.src = src;
   video.addEventListener('canplay', () => {
@@ -566,27 +594,90 @@ document.querySelectorAll('.hgc').forEach(tile => {
 });
 </script>
 <script>
-// ── MOUSE BLUR ON WORDMARK ──
-// Blur intensifies as mouse moves AWAY from the wordmark center
+// ── XOANON HOVER INTERACTION & PARTICLES ──
 const wordmark = document.querySelector('.hero-wordmark');
 if (wordmark) {
-  document.addEventListener('mousemove', e => {
-    const r = wordmark.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    // Max blur 8px at distance ~600px, 0 blur when cursor is close
-    const maxDist = 600;
-    const maxBlur = 8;
-    const blur = Math.min((dist / maxDist) * maxBlur, maxBlur);
-    wordmark.style.filter = `blur(${blur.toFixed(2)}px)`;
+  const text = "XOANON"; // Re-asserting the base text
+  wordmark.innerHTML = '';
+  const letters = [];
+  text.split('').forEach((char, i) => {
+    const span = document.createElement('span');
+    span.className = 'hw-letter';
+    span.innerText = char;
+    span.style.setProperty('--i', i);
+    wordmark.appendChild(span);
+    letters.push(span);
+    
+    span.addEventListener('mouseenter', () => {
+      letters.forEach((l, j) => {
+        const dist = Math.abs(i - j);
+        if (dist === 0) {
+          l.style.transform = 'scale(1.15) translateY(-5px)';
+          l.style.filter = 'blur(0px)';
+          l.style.opacity = '1';
+          l.style.textShadow = '0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(255,255,255,0.2)';
+        } else if (dist === 1) {
+          l.style.transform = 'scale(0.95)';
+          l.style.filter = 'blur(4px)';
+          l.style.opacity = '0.6';
+          l.style.textShadow = 'none';
+        } else {
+          l.style.transform = 'scale(0.9)';
+          l.style.filter = 'blur(8px)';
+          l.style.opacity = '0.3';
+          l.style.textShadow = 'none';
+        }
+      });
+    });
   });
-  // Reset blur when mouse leaves window
-  document.addEventListener('mouseleave', () => {
-    wordmark.style.filter = 'blur(0px)';
+
+  wordmark.addEventListener('mouseleave', () => {
+    letters.forEach(l => {
+      l.style.transform = '';
+      l.style.filter = '';
+      l.style.opacity = '';
+      l.style.textShadow = '';
+    });
   });
+}
+
+// ── SUBTLE PARTICLES ──
+const heroCanvas = document.getElementById('hero-particles');
+if (heroCanvas) {
+  const ctx = heroCanvas.getContext('2d');
+  function resizeCanvas() {
+    heroCanvas.width = heroCanvas.parentElement.clientWidth;
+    heroCanvas.height = heroCanvas.parentElement.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  const pts = Array.from({length: 60}).map(() => ({
+    x: Math.random() * heroCanvas.width,
+    y: Math.random() * heroCanvas.height,
+    s: Math.random() * 1.5 + 0.5,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * -0.6 - 0.1,
+    a: Math.random() * 0.5 + 0.1,
+    f: Math.random() * 0.05
+  }));
+
+  function loopPts() {
+    ctx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+    pts.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      p.a += Math.sin(Date.now() * p.f) * 0.01;
+      if (p.y < 0) p.y = heroCanvas.height;
+      if (p.x < 0) p.x = heroCanvas.width;
+      if (p.x > heroCanvas.width) p.x = 0;
+      ctx.fillStyle = `rgba(200, 220, 255, ${Math.max(0, Math.min(0.6, p.a))})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.s, 0, Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(loopPts);
+  }
+  loopPts();
 }
 </script>
 </body>

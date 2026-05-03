@@ -107,6 +107,90 @@
 .join-sub { font-size: 13px; color: var(--muted); line-height: 1.65; font-weight: 300; }
 .join-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gold); font-weight: 600; text-decoration: none; cursor: none; margin-top: 4px; transition: gap .3s var(--expo); }
 .join-link:hover { gap: 12px; }
+
+/* ─── PROFILE MODAL ─── */
+.pm-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pm-overlay.active { opacity: 1; pointer-events: all; }
+
+.pm-top-left { position: absolute; top: 32px; left: 32px; display: flex; gap: 12px; z-index: 10; }
+.pm-top-right { position: absolute; top: 32px; right: 32px; z-index: 10; }
+
+.pm-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(20,20,20,0.8); color: #fff; display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.1); cursor: none; transition: background .3s, transform .3s;
+}
+.pm-btn:hover { background: rgba(50,50,50,0.9); transform: scale(1.05); }
+
+.pm-modal {
+  width: 90vw; max-width: 1100px; height: 85vh; max-height: 700px;
+  background: #fdfdfd; border-radius: 6px; overflow: hidden;
+  display: flex; position: relative;
+  transform: translateY(30px) scale(0.98); transition: transform .5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+}
+.pm-overlay.active .pm-modal { transform: translateY(0) scale(1); }
+
+.pm-left {
+  width: 42%; padding: 48px; background: #fdfdfd;
+  display: flex; flex-direction: column; gap: 24px;
+}
+.pm-name {
+  font-family: 'DM Sans', sans-serif; font-size: 42px; font-weight: 300;
+  color: #1a1a1a; letter-spacing: -1px; line-height: 1.1; margin: 0;
+}
+.pm-meta-grid { display: flex; gap: 40px; }
+.pm-meta-item { display: flex; flex-direction: column; gap: 6px; }
+.pm-meta-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; color: #888; letter-spacing: 1px; }
+.pm-meta-val { font-family: 'DM Sans', sans-serif; font-size: 16px; color: #1a1a1a; font-weight: 400; }
+
+.pm-photo-wrap {
+  flex: 1; border-radius: 8px; overflow: hidden; background: #eee;
+  min-height: 250px; position: relative;
+}
+.pm-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pm-photo-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #e5e5e5; color: #999; font-family: 'DM Sans', sans-serif; font-size: 14px; }
+
+.pm-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.pm-tag {
+  padding: 8px 14px; background: #f4f4f4; border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #1a1a1a; letter-spacing: .5px; text-transform: uppercase;
+}
+.pm-tag.linkedin { background: #0077b5; color: #fff; font-family: sans-serif; font-weight: bold; text-transform: none; }
+.pm-tag.github { background: #333; color: #fff; font-family: sans-serif; font-weight: bold; text-transform: none; }
+.pm-tag.gmail { background: #ea4335; color: #fff; font-family: sans-serif; font-weight: bold; text-transform: none; }
+
+.pm-right {
+  width: 58%; background: #ffffff;
+  padding: 48px; padding-right: 24px;
+  border-left: 1px solid #f0f0f0;
+}
+.pm-scroll {
+  height: 100%; overflow-y: auto; padding-right: 24px;
+}
+.pm-scroll::-webkit-scrollbar { width: 6px; }
+.pm-scroll::-webkit-scrollbar-track { background: #f8f8f8; border-radius: 10px; }
+.pm-scroll::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 10px; }
+
+.pm-heading {
+  font-family: 'DM Sans', sans-serif; font-size: 32px; font-weight: 300; letter-spacing: -0.5px;
+  color: #1a1a1a; margin-bottom: 24px; margin-top: 40px;
+}
+.pm-heading:first-child { margin-top: 0; }
+.pm-text {
+  font-family: 'DM Sans', sans-serif; font-size: 15px; color: #4a4a4a; line-height: 1.7;
+  margin-bottom: 32px; font-weight: 400;
+}
+.pm-question {
+  font-family: 'DM Sans', sans-serif; font-size: 17px; font-weight: 500;
+  color: #1a1a1a; margin-bottom: 12px; line-height: 1.4;
+}
 </style>
 </head>
 <body>
@@ -140,10 +224,10 @@
   </svg>
   <div class="page-hero-content">
     <div class="hero-label">The People</div>
-    <h1 class="hero-title">The <span class="gold">13.</span><br><span class="outline">Our Team.</span></h1>
+    <h1 class="hero-title">The <span class="gold">11.</span><br><span class="outline">Our Team.</span></h1>
     <p class="hero-sub">Builders, engineers, and designers united by one obsession — tools that feel as powerful as the ideas they serve.</p>
     <div class="hero-meta">
-      <div class="hm-item">13 members</div>
+      <div class="hm-item">11 members</div>
       <div class="hm-sep"></div>
       <div class="hm-item">Remote-first</div>
       <div class="hm-sep"></div>
@@ -157,155 +241,210 @@
 <div class="section">
   <div class="team-filters reveal">
     <div class="tf active">All</div>
-    <div class="tf">Founders</div>
+    <div class="tf">Management</div>
     <div class="tf">Engineering</div>
     <div class="tf">Design</div>
-    <div class="tf">Product</div>
+    <div class="tf">Social</div>
   </div>
 
   <div class="team-grid">
 
-    <!-- CARD 1 -->
+    <!-- CARD 1: Afshal -->
     <div class="tc reveal">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Your Name<br>Here</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City, Country</div><div class="tc-label">Focus</div><div class="tc-value">Vision<br>Growth<br>Fundraising</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product Strategy</div></div></div>
+          <div class="tc-hover-name">Afshal</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Management</div>
+              <div class="tc-label">Product</div><div class="tc-value">NYX, RIFT, STYX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Your Name Here</div>
+      <div class="tc-bottom-name">Afshal</div>
     </div>
 
-    <!-- CARD 2 -->
+    <!-- CARD 2: Hariprasath -->
     <div class="tc reveal d1">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">AI<br>Infrastructure</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <div class="tc-hover-name">Hariprasath</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Database & Auth</div>
+              <div class="tc-label">Product</div><div class="tc-value">NYX, STYX, FLUX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Hariprasath</div>
     </div>
 
-    <!-- CARD 3 -->
+    <!-- CARD 3: Sridhar -->
     <div class="tc reveal d2">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">UX<br>Brand</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Design</div></div></div>
+          <div class="tc-hover-name">Sridhar</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Database & Auth</div>
+              <div class="tc-label">Product</div><div class="tc-value">NYX, STYX, FLUX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Sridhar</div>
     </div>
 
-    <!-- CARD 4 -->
+    <!-- CARD 4: Yogesh -->
     <div class="tc reveal d3">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Backend</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <div class="tc-hover-name">Yogesh</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Site Architect</div>
+              <div class="tc-label">Product</div><div class="tc-value">All Products</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Yogesh</div>
     </div>
 
-    <!-- CARD 5 -->
+    <!-- CARD 5: Gangaraj -->
     <div class="tc reveal">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Roadmap</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product</div></div></div>
+          <div class="tc-hover-name">Gangaraj</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Design</div>
+              <div class="tc-label">Product</div><div class="tc-value">NYX, RIFT, STYX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Gangaraj</div>
     </div>
 
-    <!-- CARD 6 -->
+    <!-- CARD 6: Athi -->
     <div class="tc reveal d1">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Models</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <div class="tc-hover-name">Athi</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Design</div>
+              <div class="tc-label">Product</div><div class="tc-value">NYX, RIFT, STYX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Athi</div>
     </div>
 
-    <!-- CARD 7 -->
+    <!-- CARD 7: Rajkrishna -->
     <div class="tc reveal d2">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">UI/UX</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <div class="tc-hover-name">Rajkrishna</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Research & Dev</div>
+              <div class="tc-label">Product</div><div class="tc-value">RIFT, STYX, SPECTER...</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Rajkrishna</div>
     </div>
 
-    <!-- CARD 8 -->
+    <!-- CARD 8: Vimalpravin -->
     <div class="tc reveal d3">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Growth</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Operations</div></div></div>
+          <div class="tc-hover-name">Vimalpravin</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Research & Building</div>
+              <div class="tc-label">Product</div><div class="tc-value">RIFT, STYX</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Vimalpravin</div>
     </div>
 
-    <!-- CARD 9 -->
+    <!-- CARD 9: Sanjeevi -->
     <div class="tc reveal">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Data</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Engineering</div></div></div>
+          <div class="tc-hover-name">Sanjeevi</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Social Media</div>
+              <div class="tc-label">Product</div><div class="tc-value">All Products</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Sanjeevi</div>
     </div>
 
-    <!-- CARD 10 -->
+    <!-- CARD 10: Selva -->
     <div class="tc reveal d1">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Strategy</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Product</div></div></div>
+          <div class="tc-hover-name">Selva</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Social Media</div>
+              <div class="tc-label">Product</div><div class="tc-value">All Products</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Selva</div>
     </div>
 
-    <!-- CARD 11 -->
+    <!-- CARD 11: Toshith -->
     <div class="tc reveal d2">
       <div class="tc-image-wrapper">
         <div class="tc-ph"><svg width="80" height="80" viewBox="0 0 80 80" fill="none"><circle cx="40" cy="30" r="16" stroke="#e8e0d5" stroke-width="1.5"/><path d="M10,72 C10,55.4 23.4,42 40,42 C56.6,42 70,55.4 70,72" stroke="#e8e0d5" stroke-width="1.5" stroke-linecap="round"/></svg></div>
         <div class="tc-hover-overlay">
-          <div class="tc-hover-name">Team<br>Member</div>
-          <div class="tc-hover-details"><div class="tc-col"><div class="tc-label">Based In</div><div class="tc-value">City</div><div class="tc-label">Focus</div><div class="tc-value">Visuals</div></div><div class="tc-col"><div class="tc-label">Specialty</div><div class="tc-value">Design</div></div></div>
+          <div class="tc-hover-name">Toshith</div>
+          <div class="tc-hover-details">
+            <div class="tc-col">
+              <div class="tc-label">Role</div><div class="tc-value">Social Media</div>
+              <div class="tc-label">Product</div><div class="tc-value">All Products</div>
+            </div>
+          </div>
           <a href="#" class="tc-hover-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
-      <div class="tc-bottom-name">Team Member</div>
+      <div class="tc-bottom-name">Toshith</div>
     </div>
 
     <!-- JOIN CARD -->
@@ -316,6 +455,46 @@
       <a href="mailto:hello@xoanon.com" class="join-link">Get in touch →</a>
     </div>
 
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="pm-overlay" id="pmOverlay">
+  <div class="pm-top-left">
+    <button class="pm-btn magnetic" id="pmPrev"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button class="pm-btn magnetic" id="pmNext"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M9 18l6-6-6-6"/></svg></button>
+  </div>
+  <div class="pm-top-right">
+    <button class="pm-btn magnetic" id="pmClose"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="pm-modal">
+    <div class="pm-left">
+      <h2 class="pm-name" id="pmName">Rishika Garg</h2>
+      <div class="pm-meta-grid">
+        <div class="pm-meta-item">
+          <div class="pm-meta-label">Specialty</div>
+          <div class="pm-meta-val" id="pmSpecialty">Late Stage</div>
+        </div>
+        <div class="pm-meta-item">
+          <div class="pm-meta-label">Product</div>
+          <div class="pm-meta-val" id="pmBased">Bangalore</div>
+        </div>
+      </div>
+      <div class="pm-photo-wrap">
+        <img src="" class="pm-photo" id="pmPhoto" style="display:none;" alt="Profile Photo">
+        <div class="pm-photo-ph" id="pmPhotoPh">No Image Provided</div>
+      </div>
+      <div class="pm-tags" id="pmTags"></div>
+    </div>
+    <div class="pm-right">
+      <div class="pm-scroll">
+        <h3 class="pm-heading" id="pmAboutHeading">About Rishika</h3>
+        <div class="pm-text" id="pmAboutText"></div>
+        
+        <h3 class="pm-heading" id="pmKnowHeading">Get to know Rishika</h3>
+        <div id="pmQA"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -339,6 +518,239 @@ document.querySelectorAll('.tf').forEach(btn => {
     document.querySelectorAll('.tf').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   });
+});
+</script>
+<script>
+// ── PROFILE MODAL DATA & LOGIC ──
+const teamData = [
+  {
+    name: "Afshal",
+    specialty: "Management",
+    based: "NYX, RIFT, STYX (Core Oversight)",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/afshal"},
+      {text: "GitHub", type: "github", url: "https://github.com/afshal"},
+      {text: "Gmail", type: "gmail", url: "mailto:afshal@gmail.com"}
+    ],
+    about: "Leads planning and execution across XOANON products, ensuring coordination and steady progress.",
+    qa: [{ q: "Role", a: "Management" }]
+  },
+  {
+    name: "Hariprasath",
+    specialty: "Database & Auth",
+    based: "NYX, STYX, FLUX",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/hariprasath"},
+      {text: "GitHub", type: "github", url: "https://github.com/hariprasath"},
+      {text: "Gmail", type: "gmail", url: "mailto:hariprasath@gmail.com"}
+    ],
+    about: "Builds secure authentication systems and scalable backend infrastructure.",
+    qa: [{ q: "Role", a: "Database & Auth" }]
+  },
+  {
+    name: "Sridhar",
+    specialty: "Database & Auth",
+    based: "NYX, STYX, FLUX",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/sridhar"},
+      {text: "GitHub", type: "github", url: "https://github.com/sridhar"},
+      {text: "Gmail", type: "gmail", url: "mailto:sridhar@gmail.com"}
+    ],
+    about: "Develops backend systems with focus on reliability and efficient data management.",
+    qa: [{ q: "Role", a: "Database & Auth" }]
+  },
+  {
+    name: "Yogesh",
+    specialty: "Site Architect",
+    based: "All Products (Architecture Lead)",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/yogesh"},
+      {text: "GitHub", type: "github", url: "https://github.com/yogesh"},
+      {text: "Gmail", type: "gmail", url: "mailto:yogesh@gmail.com"}
+    ],
+    about: "Designs system architecture and ensures seamless integration across all XOANON platforms.",
+    qa: [{ q: "Role", a: "Site Architect & Management" }]
+  },
+  {
+    name: "Gangaraj",
+    specialty: "Design",
+    based: "NYX, RIFT, STYX",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/gangaraj"},
+      {text: "GitHub", type: "github", url: "https://github.com/gangaraj"},
+      {text: "Gmail", type: "gmail", url: "mailto:gangaraj@gmail.com"}
+    ],
+    about: "Crafts clean and user-friendly interfaces with strong focus on UI/UX.",
+    qa: [{ q: "Role", a: "Design" }]
+  },
+  {
+    name: "Athi",
+    specialty: "Design",
+    based: "NYX, RIFT, STYX",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/athi"},
+      {text: "GitHub", type: "github", url: "https://github.com/athi"},
+      {text: "Gmail", type: "gmail", url: "mailto:athi@gmail.com"}
+    ],
+    about: "Designs engaging visuals and improves user interaction across products.",
+    qa: [{ q: "Role", a: "Design" }]
+  },
+  {
+    name: "Rajkrishna",
+    specialty: "Research & Development",
+    based: "RIFT, STYX, SPECTER, PULSAR",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/rajkrishna"},
+      {text: "GitHub", type: "github", url: "https://github.com/rajkrishna"},
+      {text: "Gmail", type: "gmail", url: "mailto:rajkrishna@gmail.com"}
+    ],
+    about: "Drives innovation through research and contributes to multiple core product developments.",
+    qa: [{ q: "Role", a: "Research & Development" }]
+  },
+  {
+    name: "Vimalpravin",
+    specialty: "Research & Building",
+    based: "RIFT, STYX",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/vimalpravin"},
+      {text: "GitHub", type: "github", url: "https://github.com/vimalpravin"},
+      {text: "Gmail", type: "gmail", url: "mailto:vimalpravin@gmail.com"}
+    ],
+    about: "Works on development and implementation of researched solutions into real products.",
+    qa: [{ q: "Role", a: "Research & Building" }]
+  },
+  {
+    name: "Sanjeevi",
+    specialty: "Social Media Management",
+    based: "All Products (Brand & Marketing)",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/sanjeevi"},
+      {text: "GitHub", type: "github", url: "https://github.com/sanjeevi"},
+      {text: "Gmail", type: "gmail", url: "mailto:sanjeevi@gmail.com"}
+    ],
+    about: "Manages content strategy and audience engagement across XOANON platforms.",
+    qa: [{ q: "Role", a: "Social Media Management" }]
+  },
+  {
+    name: "Selva",
+    specialty: "Social Media Management",
+    based: "All Products (Brand Support)",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/selva"},
+      {text: "GitHub", type: "github", url: "https://github.com/selva"},
+      {text: "Gmail", type: "gmail", url: "mailto:selva@gmail.com"}
+    ],
+    about: "Supports digital campaigns and helps expand XOANON’s online reach.",
+    qa: [{ q: "Role", a: "Social Media Management" }]
+  },
+  {
+    name: "Toshith",
+    specialty: "Social Media Management",
+    based: "All Products (Content & Engagement)",
+    image: "",
+    tags: [
+      {text: "LinkedIn", type: "linkedin", url: "https://linkedin.com/in/toshith"},
+      {text: "GitHub", type: "github", url: "https://github.com/toshith"},
+      {text: "Gmail", type: "gmail", url: "mailto:toshith@gmail.com"}
+    ],
+    about: "Focuses on content distribution and improving audience interaction.",
+    qa: [{ q: "Role", a: "Social Media Management" }]
+  }
+];
+
+const tcElements = document.querySelectorAll('.tc');
+const modal = document.getElementById('pmOverlay');
+let currentIdx = 0;
+
+function openModal(idx) {
+  if(idx < 0) idx = teamData.length - 1;
+  if(idx >= teamData.length) idx = 0;
+  currentIdx = idx;
+  
+  const data = teamData[idx];
+  document.getElementById('pmName').textContent = data.name;
+  document.getElementById('pmSpecialty').textContent = data.specialty;
+  document.getElementById('pmBased').textContent = data.based;
+  
+  const img = document.getElementById('pmPhoto');
+  const ph = document.getElementById('pmPhotoPh');
+  if(data.image) {
+    img.src = data.image;
+    img.style.display = 'block';
+    ph.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    ph.style.display = 'flex';
+  }
+  
+  const tagsContainer = document.getElementById('pmTags');
+  tagsContainer.innerHTML = '';
+  data.tags.forEach(t => {
+    let s;
+    if (t.url) {
+      s = document.createElement('a');
+      s.href = t.url;
+      s.target = "_blank";
+      s.style.textDecoration = 'none';
+    } else {
+      s = document.createElement('span');
+    }
+    s.className = `pm-tag ${t.type || ''}`;
+    s.textContent = t.text;
+    tagsContainer.appendChild(s);
+  });
+  
+  const firstName = data.name.split(' ')[0];
+  document.getElementById('pmAboutHeading').textContent = `About ${firstName}`;
+  document.getElementById('pmAboutText').textContent = data.about;
+  
+  document.getElementById('pmKnowHeading').textContent = `Get to know ${firstName}`;
+  const qaContainer = document.getElementById('pmQA');
+  qaContainer.innerHTML = '';
+  data.qa.forEach(item => {
+    qaContainer.innerHTML += `
+      <p class="pm-question">${item.q}</p>
+      <p class="pm-text">${item.a}</p>
+    `;
+  });
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+tcElements.forEach((tc, idx) => {
+  tc.addEventListener('click', () => {
+    openModal(idx);
+  });
+});
+
+document.getElementById('pmClose').addEventListener('click', closeModal);
+document.getElementById('pmPrev').addEventListener('click', (e) => { e.stopPropagation(); openModal(currentIdx - 1); });
+document.getElementById('pmNext').addEventListener('click', (e) => { e.stopPropagation(); openModal(currentIdx + 1); });
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('active')) {
+    closeModal();
+  }
 });
 </script>
 </body>

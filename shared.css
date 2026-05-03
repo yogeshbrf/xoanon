@@ -19,10 +19,10 @@ body::before{content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
   opacity:0.025;mix-blend-mode:overlay;}
 
 /* CURSOR */
-#cursor{position:fixed;z-index:9999;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s var(--expo),height .2s var(--expo),opacity .2s;will-change:transform;}
-#cursor-ring{position:fixed;z-index:9998;width:40px;height:40px;border:1px solid rgba(200,169,110,0.3);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .45s var(--expo),height .45s var(--expo),border-color .3s,background .3s;will-change:transform;}
+#cursor{position:fixed;z-index:9999;width:5px;height:5px;background:var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s var(--expo),height .2s var(--expo),opacity .2s;will-change:transform;}
+#cursor-ring{position:fixed;z-index:9998;width:30px;height:30px;border:1px solid rgba(200,169,110,0.3);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .45s var(--expo),height .45s var(--expo),border-color .3s,background .3s;will-change:transform;}
 .cur-hover #cursor{width:0;height:0;opacity:0;}
-.cur-hover #cursor-ring{width:72px;height:72px;border-color:rgba(200,169,110,0.55);background:rgba(200,169,110,0.04);}
+.cur-hover #cursor-ring{width:52px;height:52px;border-color:rgba(200,169,110,0.55);background:rgba(200,169,110,0.04);}
 
 /* PAGE TRANSITION */
 #ptrans{position:fixed;inset:0;z-index:8000;background:var(--bg);transform:scaleY(0);transform-origin:bottom;pointer-events:none;transition:transform .65s var(--quart);}
